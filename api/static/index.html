@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca de Operadoras ANS</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .search-container { margin-bottom: 20px; display: flex; gap: 10px; }
+        .search-input { flex: 1; padding: 12px; font-size: 16px; border: 1px solid #ddd; border-radius: 4px; }
+        .search-button { padding: 12px 20px; background-color: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .search-button:hover { background-color: #1a252f; }
+        .search-button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        .loading { text-align: center; padding: 20px; color: #666; }
+        .results-info { margin: 10px 0; color: #555; }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0 2px 3px rgba(0,0,0,0.1); }
+        .results-table th { background-color: #2c3e50; color: white; padding: 12px; text-align: left; }
+        .results-table td { padding: 10px; border-bottom: 1px solid #ddd; }
+        .results-table tr:hover { background-color: #f5f5f5; }
+        .no-results { text-align: center; padding: 30px; color: #666; font-style: italic; }
+        .error-message { color: #e74c3c; padding: 10px; background-color: #fadbd8; border-radius: 4px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <h1>Busca de Operadoras de Saúde - ANS</h1>
+            <p>Encontre informações sobre operadoras de planos de saúde ativas no Brasil</p>
+        </div>
+        
+        <div class="search-container">
+            <input 
+                type="text" 
+                v-model="termoBusca" 
+                @keyup.enter="buscarOperadoras"
+                placeholder="Digite o nome, CNPJ, registro ANS ou qualquer termo relacionado..."
+                class="search-input"
+            >
+            <button @click="buscarOperadoras" class="search-button" :disabled="termoBusca.length < 3">Buscar</button>
+        </div>
+        
+        <div v-if="error" class="error-message">
+            {{ error }}
+        </div>
+        
+        <div v-if="carregando" class="loading">
+            Carregando resultados...
+        </div>
+        
+        <div v-if="resultados.length > 0">
+            <div class="results-info">
+                Exibindo {{ resultados.length }} de {{ totalResultados }} resultados para "{{ termoBusca }}"
+            </div>
+            
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Registro ANS</th>
+                        <th>Razão Social</th>
+                        <th>Nome Fantasia</th>
+                        <th>CNPJ</th>
+                        <th>UF</th>
+                        <th>Modalidade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="operadora in resultados" :key="operadora.registro_ans">
+                        <td>{{ operadora.registro_ans }}</td>
+                        <td>{{ operadora.razao_social }}</td>
+                        <td>{{ operadora.nome_fantasia || '-' }}</td>
+                        <td>{{ operadora.cnpj }}</td>
+                        <td>{{ operadora.uf }}</td>
+                        <td>{{ operadora.modalidade }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div v-if="pesquisaRealizada && resultados.length === 0 && termoBusca.length >= 3 && !carregando && !error" class="no-results">
+            Nenhuma operadora encontrada para "{{ termoBusca }}"
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                termoBusca: '',
+                resultados: [],
+                totalResultados: 0,
+                carregando: false,
+                error: null,
+                pesquisaRealizada: false 
+            },
+            methods: {
+                buscarOperadoras() {
+                    if (this.termoBusca.length < 3) {
+                        this.error = "Por favor, digite pelo menos 3 caracteres para buscar.";
+                        return;
+                    }
+                    
+                    this.error = null;
+                    this.carregando = true;
+                    this.resultados = [];
+                    this.pesquisaRealizada = true;
+                    
+                    axios.get('/buscar_operadoras', {
+                        params: { termo: this.termoBusca }
+                    })
+                    .then(response => {
+                        this.resultados = response.data.resultados || [];
+                        this.totalResultados = response.data.total_resultados || 0;
+                        this.carregando = false;
+                    })
+                    .catch(error => {
+                        console.error("Erro na busca:", error);
+                        this.error = error.response?.data?.error || "Ocorreu um erro ao buscar as operadoras. Por favor, tente novamente.";
+                        this.carregando = false;
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
