@@ -81,7 +81,7 @@ def transformacao_dados():
             raise ValueError("Nenhuma tabela válida encontrada no PDF")
 
         df = pd.concat(tables, ignore_index=True)
-        o
+
         df.columns = [
             str(col).replace('OD', 'Odontológico')
                    .replace('AMB', 'Ambulatorial') 
