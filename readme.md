@@ -122,17 +122,7 @@
   <div style="background-color: #2c3e50; color: white; padding: 15px; border-radius: 5px; font-family: monospace; overflow-x: auto; margin-bottom: 15px;">
     <div># Iniciar servidor backend</div>
     <div>python main.py</div>
-    <br>
-    <div># Em outro terminal (para frontend)</div>
-    <div>cd frontend</div>
-    <div>npm install</div>
-    <div>npm run serve</div>
   </div>
-  <p>Acesse:</p>
-  <ul>
-    <li>Backend: <a href="http://localhost:5000" style="color: #3498db; text-decoration: none;">http://localhost:5000</a></li>
-    <li>Frontend: <a href="http://localhost:8080" style="color: #3498db; text-decoration: none;">http://localhost:8080</a></li>
-  </ul>
 </div>
 
 <div style="background-color: #f8f9fa; padding: 25px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
