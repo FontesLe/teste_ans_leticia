@@ -1,54 +1,65 @@
-🏥 Buscador de Operadoras ANS - Guia Completo de Instalação
-GitHub
-Python
-Flask
+🏥 Buscador de Operadoras ANS - Documentação Completa
+<div style="background-color: #f0f8ff; padding: 20px; border-radius: 10px; border-left: 5px solid #2c3e50;"> <h2 style="color: #2c3e50;">🌟 Tecnologias Utilizadas</h2>
+🔧 Backend
+Tecnologia	Versão	Finalidade
+<img src="https://img.icons8.com/color/48/000000/python.png" width="20"/> Python	3.8+	Linguagem principal
+<img src="https://img.icons8.com/ios/50/000000/flask.png" width="20"/> Flask	2.0+	Framework web
+<img src="https://img.icons8.com/color/48/000000/postgreesql.png" width="20"/> PostgreSQL	12+	Banco de dados
+SQLAlchemy	1.4+	ORM para banco de dados
+Psycopg2	2.9+	Adaptador PostgreSQL
+🎨 Frontend
+Tecnologia	Versão	Finalidade
+<img src="https://img.icons8.com/color/48/000000/html-5.png" width="20"/> HTML5	-	Estrutura da página
+<img src="https://img.icons8.com/color/48/000000/css3.png" width="20"/> CSS3	-	Estilização
+<img src="https://img.icons8.com/color/48/000000/javascript.png" width="20"/> JavaScript	ES6+	Interatividade
+<img src="https://img.icons8.com/color/48/000000/vue-js.png" width="20"/> Vue.js	3.x	Framework frontend
+☁️ Infraestrutura
+Serviço	Finalidade
+<img src="https://img.icons8.com/nolan/64/render.png" width="20"/> Render	Hospedagem do banco/app
+<img src="https://img.icons8.com/color/48/000000/git.png" width="20"/> Git	Controle de versão
+</div>
+🚀 Como Executar o Projeto Localmente
+📋 Pré-requisitos
+<img src="https://img.icons8.com/color/48/000000/python.png" width="20"/> Python 3.8+
 
-📋 Visão Geral
-Aplicação completa para consulta de operadoras de planos de saúde registradas na ANS, com backend em Flask e frontend Vue.js.
+<img src="https://img.icons8.com/color/48/000000/postgreesql.png" width="20"/> PostgreSQL 12+
 
-🛠️ Pré-requisitos
-Python 3.8 ou superior
+<img src="https://img.icons8.com/color/48/000000/nodejs.png" width="20"/> Node.js 14+ (frontend)
 
-Git instalado
+<img src="https://img.icons8.com/color/48/000000/java-coffee-cup-logo.png" width="20"/> Java JDK 11+
 
-Ambiente virtual Python (obrigatório)
+<img src="https://img.icons8.com/color/48/000000/git.png" width="20"/> Git
 
-🚀 Passo a Passo Completo
-1. Clonar o repositório
+🔧 Configuração do Ambiente
 bash
 Copy
+# 1. Clonar repositório
 git clone https://github.com/FontesLe/teste_ans_leticia
-cd buscador-ans
-2. Configurar Ambiente Virtual (Obrigatório)
-bash
-Copy
-# Criar ambiente virtual
+cd teste_ans_leticia
+
+# 2. Criar ambiente virtual (Obrigatório)
 python -m venv venv
 
-# Ativar ambiente (Linux/Mac)
-source venv/bin/activate
+# Ativação:
+source venv/bin/activate       # Linux/Mac
+.\venv\Scripts\activate       # Windows
 
-# Ativar ambiente (Windows)
-venv\Scripts\activate
-
-3. Instalar Dependências
-bash
-Copy
+# 3. Instalar dependências
 pip install -r requirements.txt
+🗃️ Configuração do Banco de Dados
 
-4. Configurar Banco de Dados
-Certifique-se que o arquivo operadoras.csv está em:
+O banco já está configurado no Render - nenhuma ação adicional necessária
 
-5. Executar a Aplicação
-bash
-Copy
+🖥️ Executando a Aplicação
+
+# Iniciar o app
 python main.py
 
 📌 Dicas Importantes
-Sempre ative o ambiente virtual antes de executar
-
+✔ Sempre ative o ambiente virtual antes de trabalhar no projeto
+✔ Verifique as variáveis de ambiente no arquivo .env
 
 📄 Licença
-MIT - Veja LICENSE para detalhes.
+Este projeto está licenciado sob a licença MIT - veja o arquivo LICENSE para detalhes.
 
-Desenvolvido por Leticia
+<div style="text-align: center; margin-top: 30px;"> <p>Desenvolvido por <strong>Leticia Fontes</strong></p> <img src="https://img.icons8.com/nolan/64/github.png" width="30"/> <img src="https://img.icons8.com/color/48/000000/linkedin.png" width="30"/> </div>
