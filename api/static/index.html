@@ -36,7 +36,7 @@
                 type="text" 
                 v-model="termoBusca" 
                 @keyup.enter="buscarOperadoras"
-                placeholder="Digite o nome, CNPJ, registro ANS ou qualquer termo relacionado..."
+                placeholder="Digite o nome, CNPJ ou qualquer termo relacionado..."
                 class="search-input"
             >
             <button @click="buscarOperadoras" class="search-button" :disabled="termoBusca.length < 3">Buscar</button>
