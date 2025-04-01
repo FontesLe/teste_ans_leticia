@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import zipfile
 from urllib.parse import urljoin
 import traceback
+from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
@@ -17,6 +18,7 @@ def create_directories():
 
 def download_file(url, save_path):
     try:
+        print(f"Baixando {os.path.basename(save_path)}...")
         response = requests.get(url, stream=True, timeout=30)
         response.raise_for_status()
         
@@ -32,12 +34,14 @@ def download_file(url, save_path):
 
 def compress_files(file_paths, zip_path):
     try:
-        with zipfile.ZipFile(zip_path, 'w') as zipf:
+        with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for file in file_paths:
                 if os.path.exists(file):
-                    zipf.write(file, os.path.basename(file))
+                    arcname = os.path.basename(file)
+                    zipf.write(file, arcname)
+                    print(f"Compactado: {arcname}")
                 else:
-                    print(f"Aviso: Arquivo {file} não existe e será ignorado")
+                    print(f"Aviso: Arquivo {file} não existe")
         
         print(f"Arquivo ZIP criado em: {zip_path}")
         return True
@@ -46,13 +50,19 @@ def compress_files(file_paths, zip_path):
         return False
 
 def find_attachment(soup, keywords):
-    attachments = soup.select('a[href$=".pdf"]')
+    attachments = soup.select('a[href$=".pdf"], a[href$=".xlsx"], a[href$=".csv"]')
     for a in attachments:
         href = a['href']
         text = a.get_text().strip().lower()
         if any(keyword.lower() in text for keyword in keywords):
             return urljoin(base_url, href)
     return None
+
+def clean_filename(filename):
+    invalid_chars = '<>:"/\\|?*'
+    for char in invalid_chars:
+        filename = filename.replace(char, '_')
+    return filename.strip()
 
 def web_scraping_test():
     try:
@@ -86,21 +96,25 @@ def web_scraping_test():
             print(f"- Anexo II: {anexo_ii_url}")
         
         downloaded_files = []
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
         if anexo_i_url:
-            anexo_i_path = os.path.join(RAW_DIR, 'Anexo_I.pdf')
+            filename = clean_filename(f"Anexo_I_{timestamp}.pdf")
+            anexo_i_path = os.path.join(RAW_DIR, filename)
             if download_file(anexo_i_url, anexo_i_path):
                 downloaded_files.append(anexo_i_path)
                 print("\nDownload do Anexo I concluído com sucesso")
         
         if anexo_ii_url:
-            anexo_ii_path = os.path.join(RAW_DIR, 'Anexo_II.pdf')
+            filename = clean_filename(f"Anexo_II_{timestamp}.pdf")
+            anexo_ii_path = os.path.join(RAW_DIR, filename)
             if download_file(anexo_ii_url, anexo_ii_path):
                 downloaded_files.append(anexo_ii_path)
                 print("Download do Anexo II concluído com sucesso")
         
         if downloaded_files:
-            zip_path = os.path.join(PROCESSED_DIR, 'Teste_leticia.zip')
+            zip_filename = f"Teste_leticia_{timestamp}.zip"
+            zip_path = os.path.join(PROCESSED_DIR, zip_filename)
             if compress_files(downloaded_files, zip_path):
                 print(f"\nProcesso concluído! Arquivos disponíveis em:")
                 print(f"- PDFs: {RAW_DIR}")
